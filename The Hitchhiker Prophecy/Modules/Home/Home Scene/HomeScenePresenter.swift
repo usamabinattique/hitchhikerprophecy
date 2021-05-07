@@ -18,7 +18,6 @@ class HomeScenePresneter: HomeScenePresentationLogic {
     func presentCharacters(_ response: HomeScene.Search.Response) {
         switch response {
         case let .success(output):
-            
             displayView?.didFetchCharacters(viewModel: output.data.results.map(convertOutputToVM(_:)))
             
         case let .failure(error):

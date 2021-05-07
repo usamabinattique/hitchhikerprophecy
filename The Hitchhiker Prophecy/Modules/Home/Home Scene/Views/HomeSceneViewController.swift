@@ -16,16 +16,18 @@ class HomeSceneViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         interactor?.fetchCharacters()
     }
 }
 
 extension HomeSceneViewController: HomeSceneDisplayView {
     func didFetchCharacters(viewModel: [HomeScene.Search.ViewModel]) {
-        // TODO: Implement
+        view.backgroundColor = .yellow
     }
     
     func failedToFetchCharacters(error: Error) {
         // TODO: Implement
+
     }
 }
