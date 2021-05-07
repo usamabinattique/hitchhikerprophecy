@@ -24,8 +24,8 @@ class HomeSceneInteractor: HomeSceneDataStore {
 extension HomeSceneInteractor: HomeSceneBusinessLogic {
     func fetchCharacters() {
         
-        let ts = "1"
-        let hash = "" // TODO: Implement
+        let ts = NetworkConstants.timeStamp
+        let hash = NetworkConstants.apiHash
         let limit = HomeScene.Search.Constants.searchPageLimit
         let offset = result?.offset ?? 0
         let input = Characters.Search.Input(timeStamp: ts, apiKey: NetworkConstants.publicKey, hash: hash, offset: offset, limit: limit, orderBy: .modifiedDateDescending)

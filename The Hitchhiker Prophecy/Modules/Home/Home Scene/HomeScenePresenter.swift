@@ -16,6 +16,6 @@ class HomeScenePresneter: HomeScenePresentationLogic {
     }
     
     func presentCharacters(_ response: HomeScene.Search.Response) {
-        // TODO: Implement
+        
     }
 }
