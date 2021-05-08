@@ -83,6 +83,10 @@ extension UIView {
             alignBottom(view, constant: -insets.bottom)
         ]
     }
+    
+    func constraintHeight(_ height: CGFloat) -> NSLayoutConstraint {
+        heightAnchor.constraint(equalToConstant: height)
+    }
 }
 
 
