@@ -8,40 +8,35 @@
 
 import UIKit
 
-enum Layout {
-    case cards
-    case list
-}
-
 class HomeSceneViewController: UIViewController {
     
     // MARK: - Properties
     var interactor: HomeSceneBusinessLogic?
     var router: HomeSceneRoutingLogic?
+    
+    
     var charactersView: CharactersView!
+    var activityIndicator: UIActivityIndicatorView!
     
-    // MARK: - IBOutlets
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
-    
-    private var layout: Layout = .list
-
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        interactor?.fetchCharacters()
-        setupNavigationItem()
-        setupCharactersView()
+        
+        setupUI()
+        fetchCharacters()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
-     
-    
-    // MARK: -
+}
 
+private extension HomeSceneViewController {
+    func fetchCharacters() {
+        activityIndicator.startAnimating()
+        interactor?.fetchCharacters()
+    }
 }
 
 extension HomeSceneViewController: HomeSceneDisplayView {
@@ -50,12 +45,20 @@ extension HomeSceneViewController: HomeSceneDisplayView {
     }
     
     func failedToFetchCharacters(error: Error) {
-        
-        
+        activityIndicator.stopAnimating()
+        displayAlert(error: error)
     }
 }
 
-extension HomeSceneViewController {
+   //MARK: UI Helper Methods
+private extension HomeSceneViewController {
+    
+    func setupUI() {
+        setupNavigationItem()
+        setupActivityIndicator()
+        setupCharactersView()
+    }
+    
     func setupCharactersView() {
         
         charactersView = CharactersView(router: router)
@@ -70,6 +73,17 @@ extension HomeSceneViewController {
         }
     }
     
+    func setupActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.style = .large
+        activityIndicator.color = .white
+        view.addSubview(activityIndicator)
+        
+        activityIndicator.withConstraints { view in
+            view.alignCenter()
+        }
+    }
+    
     func setupNavigationItem() {
         let button = UIBarButtonItem(title: "Change Layout", style: .plain, target: self, action: #selector(changeLayoutTapped))
         navigationItem.rightBarButtonItem = button
@@ -78,5 +92,28 @@ extension HomeSceneViewController {
     /// Collection View Layout Action
     @objc func changeLayoutTapped(_ sender: Any) {
         charactersView.toggleList()
+    }
+}
+
+private extension HomeSceneViewController {
+    
+    func displayAlert(error: Error){
+        let alert = UIAlertController( title: "Error",
+                                       message: error.localizedDescription,
+                                       preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Retry",
+                                      style: .default)
+        { _ in
+            self.fetchCharacters()
+        })
+        
+        alert.addAction(UIAlertAction(title: "Cancel",
+                                      style: .destructive,
+                                      handler: nil))
+        
+        present(alert, animated: true, completion: nil)
+        
     }
 }

@@ -75,6 +75,20 @@ extension UIView {
         bottomAnchor.constraint(equalTo: anchorView(view).bottomAnchor, constant: constant)
     }
     
+    func alignCenterX(_ view: UIView? = nil, constant: CGFloat = 0) -> NSLayoutConstraint {
+        centerXAnchor.constraint(equalTo: anchorView(view).centerXAnchor, constant: constant)
+    }
+
+    func alignCenterY(_ view: UIView? = nil, constant: CGFloat = 0) -> NSLayoutConstraint {
+        centerYAnchor.constraint(equalTo: anchorView(view).centerYAnchor, constant: constant)
+    }
+
+    func alignCenter(_ view: UIView? = nil) -> [NSLayoutConstraint] {
+        [   alignCenterX(view),
+            alignCenterY(view)
+        ]
+    }
+    
     func alignEdges(_ view: UIView? = nil, insets: UIEdgeInsets = UIEdgeInsets.init()) -> [NSLayoutConstraint] {
         return [
             alignLeft(view, constant: insets.left),

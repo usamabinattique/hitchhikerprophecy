@@ -36,6 +36,7 @@ class HomeSceneInteractorTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
+        
     }
 
     func testExample() throws {
