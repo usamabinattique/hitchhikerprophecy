@@ -52,12 +52,12 @@ class CharactersView: UIView {
 }
 
 extension CharactersView {
-    func updateCharacters(characters: [HomeScene.Search.ViewModel]) {
+    public func updateCharacters(characters: [HomeScene.Search.ViewModel]) {
         self.characters = characters
         collectionView.reloadData()
     }
     
-    func toggleList() {
+    public func toggleList() {
         
         /// original implementation for toggling layout
 //                collectionView.setCollectionViewLayout( collectionView.collectionViewLayout is PeekCollectionLayout ? ListCollectionLayout(width: collectionView.frame.width * 0.9, height: collectionView.frame.height * 0.25) : PeekCollectionLayout(),
@@ -66,8 +66,8 @@ extension CharactersView {
         // switch is added for syntatic sugar
         switch collectionView.collectionViewLayout {
         case is PeekCollectionLayout:
-            collectionView.setCollectionViewLayout(ListCollectionLayout(width: collectionView.frame.width * 0.9,
-                                                                        height: collectionView.frame.height * 0.25), animated: true)
+            collectionView.setCollectionViewLayout(ListCollectionLayout(width: collectionView.frame.width * 0.95,
+                                                                        height: collectionView.frame.height * 0.27), animated: true)
         case is ListCollectionLayout:
             collectionView.setCollectionViewLayout(PeekCollectionLayout(), animated: true)
         default:

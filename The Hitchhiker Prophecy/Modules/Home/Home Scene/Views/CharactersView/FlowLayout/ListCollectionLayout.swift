@@ -10,8 +10,14 @@ import UIKit
 
 class ListCollectionLayout: UICollectionViewFlowLayout {
     
+    private let scaleFactor: CGFloat = 0.25
+    private var width: CGFloat!
     override init() {
         super.init()
+        scrollDirection = .vertical
+        minimumInteritemSpacing = 15
+        sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+
     }
     
     required init?(coder: NSCoder) {
@@ -20,9 +26,23 @@ class ListCollectionLayout: UICollectionViewFlowLayout {
     
     convenience init(width: CGFloat, height: CGFloat) {
         self.init()
-        scrollDirection = .vertical
-        minimumLineSpacing = 15
-        sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 5, right: 5)
+        self.width = width
         itemSize = CGSize(width: width, height: height)
+    }
+    
+    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
+        
+        var offsetAdjustment = CGFloat.greatestFiniteMagnitude
+        
+        let targetRect = CGRect(x: proposedContentOffset.x, y: 0, width: collectionView!.bounds.width * scaleFactor, height: collectionView!.bounds.height * scaleFactor)
+        
+        super.layoutAttributesForElements(in: targetRect)?.forEach {
+            let offset = $0.frame.origin.x
+            if (abs(offset - proposedContentOffset.x) < abs(offsetAdjustment)) {
+                offsetAdjustment = offset - proposedContentOffset.x
+            }
+        }
+        
+        return CGPoint(x: proposedContentOffset.x + offsetAdjustment - (UIScreen.main.bounds.width - width) * 0.5, y: proposedContentOffset.y)
     }
 }

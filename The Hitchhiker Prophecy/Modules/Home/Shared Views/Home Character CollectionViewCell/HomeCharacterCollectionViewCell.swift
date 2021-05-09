@@ -29,5 +29,12 @@ class HomeCharacterCollectionViewCell: UICollectionViewCell {
             characterImageView.image = UIImage(named:"placeHolder")
         }
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        characterNameLabel.text = ""
+        characterImageView.image = UIImage()
+    }
+
 }
 
