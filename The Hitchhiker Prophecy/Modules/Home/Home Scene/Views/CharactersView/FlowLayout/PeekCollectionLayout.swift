@@ -17,17 +17,18 @@ class PeekCollectionLayout: UICollectionViewFlowLayout {
     override init() {
         super.init()
         scrollDirection = .horizontal
+        minimumInteritemSpacing = 20
         minimumLineSpacing = 20
         sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 5, right: 20)
         width = UIScreen.main.bounds.width * scaleFactor
         height = UIScreen.main.bounds.height * scaleFactor
-        
         itemSize = CGSize(width: width, height: height)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
         
