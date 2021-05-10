@@ -8,15 +8,19 @@
 
 import UIKit
 
+protocol CharactersViewActionable: AnyObject {
+    func select(at index: Int)
+}
+
 class CharactersView: UIView {
     
     // MARK: Properties
 
-    var selectedLayout = HomeScene.LayoutType.peek
-    var collectionView: UICollectionView!
+    private var collectionView: UICollectionView!
     
     private var characters: [HomeScene.Search.ViewModel] = []
-    private var router: HomeSceneRoutingLogic?
+    
+    weak var delegate: CharactersViewActionable?
 
     // MARK: Life Cycle
     override init(frame: CGRect) {
@@ -27,11 +31,6 @@ class CharactersView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    convenience init(router: HomeSceneRoutingLogic?) {
-        self.init()
-        self.router = router
     }
 }
 
@@ -60,14 +59,13 @@ extension CharactersView {
     public func toggleList() {
         
         /// original implementation for toggling layout
-//                collectionView.setCollectionViewLayout( collectionView.collectionViewLayout is PeekCollectionLayout ? ListCollectionLayout(width: collectionView.frame.width * 0.9, height: collectionView.frame.height * 0.25) : PeekCollectionLayout(),
+//                collectionView.setCollectionViewLayout( collectionView.collectionViewLayout is PeekCollectionLayout ? ListCollectionLayout(collectionView: collectionView) : PeekCollectionLayout(),
 //                                                        animated: true)
         
         // switch is added for syntatic sugar
         switch collectionView.collectionViewLayout {
         case is PeekCollectionLayout:
-            collectionView.setCollectionViewLayout(ListCollectionLayout(width: collectionView.frame.width * 0.95,
-                                                                        height: collectionView.frame.height * 0.27), animated: true)
+            collectionView.setCollectionViewLayout(ListCollectionLayout(collectionView: collectionView), animated: true)
         case is ListCollectionLayout:
             collectionView.setCollectionViewLayout(PeekCollectionLayout(), animated: true)
         default:
@@ -94,6 +92,6 @@ extension CharactersView: UICollectionViewDataSource {
 /// UICollection View Delegate
 extension CharactersView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        router?.routeToCharacterDetailsWithCharacter(at: indexPath.row)
+        delegate?.select(at: indexPath.row)
     }
 }

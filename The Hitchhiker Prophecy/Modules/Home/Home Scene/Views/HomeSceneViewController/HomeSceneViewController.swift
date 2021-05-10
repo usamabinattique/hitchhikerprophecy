@@ -14,10 +14,8 @@ class HomeSceneViewController: UIViewController {
     var interactor: HomeSceneBusinessLogic?
     var router: HomeSceneRoutingLogic?
     
-    
     var charactersView: CharactersView!
     var activityIndicator: UIActivityIndicatorView!
-    
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -41,6 +39,7 @@ private extension HomeSceneViewController {
 
 extension HomeSceneViewController: HomeSceneDisplayView {
     func didFetchCharacters(viewModel: [HomeScene.Search.ViewModel]) {
+        activityIndicator.stopAnimating()
         charactersView.updateCharacters(characters: viewModel)
     }
     
@@ -61,15 +60,16 @@ private extension HomeSceneViewController {
     
     func setupCharactersView() {
         
-        charactersView = CharactersView(router: router)
+        charactersView = CharactersView()
+        charactersView.delegate = self
         charactersView.backgroundColor = .clear
         view.addSubview(charactersView)
         
         charactersView.withConstraints { view in
             [ view.alignTop(self.view.safeAreaLayoutGuide, constant: 0),
-              charactersView.alignLeading(),
-              charactersView.alignTrailing(),
-              charactersView.alignBottom()]
+              view.alignLeading(),
+              view.alignTrailing(),
+              view.alignBottom()]
         }
     }
     
@@ -95,6 +95,8 @@ private extension HomeSceneViewController {
     }
 }
 
+
+/// Error Handling
 private extension HomeSceneViewController {
     
     func displayAlert(error: Error){
@@ -115,5 +117,12 @@ private extension HomeSceneViewController {
         
         present(alert, animated: true, completion: nil)
         
+    }
+}
+
+
+extension HomeSceneViewController: CharactersViewActionable {
+    func select(at index: Int) {
+        router?.routeToCharacterDetailsWithCharacter(at: index)
     }
 }
